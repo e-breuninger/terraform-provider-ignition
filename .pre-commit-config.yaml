@@ -1,0 +1,27 @@
+---
+repos:
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v4.4.0
+    hooks:
+      - id: trailing-whitespace
+        args: [--markdown-linebreak-ext=md]
+      - id: check-added-large-files
+      - id: detect-private-key
+      - id: end-of-file-fixer
+  - repo: https://github.com/adrienverge/yamllint.git
+    rev: v1.17.0
+    hooks:
+      - id: yamllint
+        args: [-c=.yaml-lint.yml]
+  - repo: https://github.com/Bahjat/pre-commit-golang
+    rev: v1.0.2
+    hooks:
+      - id: go-fmt-import
+      - id: go-vet
+      - id: go-lint
+      - id: go-unit-tests
+      - id: gofumpt # requires github.com/mvdan/gofumpt
+      - id: golangci-lint # requires github.com/golangci/golangci-lint
+        args: [--config=.github/linters/.golangci.yml] # optional
+      - id: go-ruleguard # requires https://github.com/quasilyte/go-ruleguard
+        args: [rules/rules.go] # required 
