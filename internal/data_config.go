@@ -96,7 +96,7 @@ var versionToLibrary = map[string]ignitionInterface{
 func getLibraryForVersion(version string) (ignitionInterface, error) {
 	ignition, ok := versionToLibrary[version]
 	if !ok {
-		return ignitionInterface{}, errors.New("Incompatible version.")
+		return ignitionInterface{}, errors.New("Incompatible version")
 	}
 	return ignition, nil
 }
