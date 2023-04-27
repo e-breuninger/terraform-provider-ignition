@@ -33,4 +33,3 @@ See the [Flatcar Container Linux](examples/flatcar-linux.tf) or [Fedora CoreOS](
 ## Argument Attributes
 
 * `rendered` - transpiled Ignition configuration
-

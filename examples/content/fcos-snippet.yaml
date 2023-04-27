@@ -7,4 +7,3 @@ storage:
         inline: |
           [updates]
           enabled = false
-
