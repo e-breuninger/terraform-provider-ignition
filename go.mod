@@ -1,4 +1,4 @@
-module github.com/poseidon/terraform-provider-ct
+module github.com/e-breuninger/terraform-provider-ignition
 
 go 1.19
 

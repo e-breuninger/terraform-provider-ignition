@@ -10,7 +10,7 @@ import (
 // Fedora CoreOS variant, v1.5.0
 
 const fedoraCoreOSV15Resource = `
-data "ct_config" "fedora-coreos" {
+data "ignition_config" "fedora-coreos" {
   pretty_print = true
   strict = true
   content = <<EOT
@@ -31,7 +31,7 @@ EOT
 `
 
 const fedoraCoreOSV15WithSnippets = `
-data "ct_config" "fedora-coreos-snippets" {
+data "ignition_config" "fedora-coreos-snippets" {
   pretty_print = true
   strict = true
   content = <<EOT
@@ -59,7 +59,7 @@ EOT
 `
 
 const fedoraCoreOSV15WithSnippetsPrettyFalse = `
-data "ct_config" "fedora-coreos-snippets" {
+data "ignition_config" "fedora-coreos-snippets" {
   pretty_print = false
   strict = true
   content = <<EOT
@@ -93,19 +93,19 @@ func TestButaneConfig_FCOSv1_5(t *testing.T) {
 			{
 				Config: fedoraCoreOSV15Resource,
 				Check: r.ComposeTestCheckFunc(
-					r.TestCheckResourceAttr("data.ct_config.fedora-coreos", "rendered", ignitionV34Expected),
+					r.TestCheckResourceAttr("data.ignition_config.fedora-coreos", "rendered", ignitionV34Expected),
 				),
 			},
 			{
 				Config: fedoraCoreOSV15WithSnippets,
 				Check: r.ComposeTestCheckFunc(
-					r.TestCheckResourceAttr("data.ct_config.fedora-coreos-snippets", "rendered", ignitionV34WithSnippetsExpected),
+					r.TestCheckResourceAttr("data.ignition_config.fedora-coreos-snippets", "rendered", ignitionV34WithSnippetsExpected),
 				),
 			},
 			{
 				Config: fedoraCoreOSV15WithSnippetsPrettyFalse,
 				Check: r.ComposeTestCheckFunc(
-					r.TestCheckResourceAttr("data.ct_config.fedora-coreos-snippets", "rendered", ignitionV34WithSnippetsPrettyFalseExpected),
+					r.TestCheckResourceAttr("data.ignition_config.fedora-coreos-snippets", "rendered", ignitionV34WithSnippetsPrettyFalseExpected),
 				),
 			},
 		},
@@ -115,7 +115,7 @@ func TestButaneConfig_FCOSv1_5(t *testing.T) {
 // Fedora CoreOS variant, v1.4.0
 
 const fedoraCoreOSV14Resource = `
-data "ct_config" "fedora-coreos" {
+data "ignition_config" "fedora-coreos" {
   pretty_print = true
   strict = true
   content = <<EOT
@@ -257,7 +257,7 @@ const ignitionV34Expected = `{
 }`
 
 const fedoraCoreOSV14WithSnippets = `
-data "ct_config" "fedora-coreos-snippets" {
+data "ignition_config" "fedora-coreos-snippets" {
   pretty_print = true
   strict = true
   content = <<EOT
@@ -462,7 +462,7 @@ const ignitionV34WithSnippetsExpected = `{
 }`
 
 const fedoraCoreOSV14WithSnippetsPrettyFalse = `
-data "ct_config" "fedora-coreos-snippets" {
+data "ignition_config" "fedora-coreos-snippets" {
   pretty_print = false
   strict = true
   content = <<EOT
@@ -505,19 +505,19 @@ func TestButaneConfig_FCOSv1_4(t *testing.T) {
 			{
 				Config: fedoraCoreOSV14Resource,
 				Check: r.ComposeTestCheckFunc(
-					r.TestCheckResourceAttr("data.ct_config.fedora-coreos", "rendered", ignitionV33Expected),
+					r.TestCheckResourceAttr("data.ignition_config.fedora-coreos", "rendered", ignitionV33Expected),
 				),
 			},
 			{
 				Config: fedoraCoreOSV14WithSnippets,
 				Check: r.ComposeTestCheckFunc(
-					r.TestCheckResourceAttr("data.ct_config.fedora-coreos-snippets", "rendered", ignitionV33WithSnippetsExpected),
+					r.TestCheckResourceAttr("data.ignition_config.fedora-coreos-snippets", "rendered", ignitionV33WithSnippetsExpected),
 				),
 			},
 			{
 				Config: fedoraCoreOSV14WithSnippetsPrettyFalse,
 				Check: r.ComposeTestCheckFunc(
-					r.TestCheckResourceAttr("data.ct_config.fedora-coreos-snippets", "rendered", ignitionV33WithSnippetsPrettyFalseExpected),
+					r.TestCheckResourceAttr("data.ignition_config.fedora-coreos-snippets", "rendered", ignitionV33WithSnippetsPrettyFalseExpected),
 				),
 			},
 		},
@@ -527,7 +527,7 @@ func TestButaneConfig_FCOSv1_4(t *testing.T) {
 // Fedora CoreOS variant, v1.3.0
 
 const fedoraCoreOSV13Resource = `
-data "ct_config" "fedora-coreos" {
+data "ignition_config" "fedora-coreos" {
   pretty_print = true
   strict = true
   content = <<EOT
@@ -548,7 +548,7 @@ EOT
 `
 
 const fedoraCoreOSV13WithSnippets = `
-data "ct_config" "fedora-coreos-snippets" {
+data "ignition_config" "fedora-coreos-snippets" {
   pretty_print = true
   strict = true
   content = <<EOT
@@ -576,7 +576,7 @@ EOT
 `
 
 const fedoraCoreOSV13WithSnippetsPrettyFalse = `
-data "ct_config" "fedora-coreos-snippets" {
+data "ignition_config" "fedora-coreos-snippets" {
   pretty_print = false
   strict = true
   content = <<EOT
@@ -610,19 +610,19 @@ func TestButaneConfig_FCOSv1_3(t *testing.T) {
 			{
 				Config: fedoraCoreOSV13Resource,
 				Check: r.ComposeTestCheckFunc(
-					r.TestCheckResourceAttr("data.ct_config.fedora-coreos", "rendered", ignitionV32Expected),
+					r.TestCheckResourceAttr("data.ignition_config.fedora-coreos", "rendered", ignitionV32Expected),
 				),
 			},
 			{
 				Config: fedoraCoreOSV13WithSnippets,
 				Check: r.ComposeTestCheckFunc(
-					r.TestCheckResourceAttr("data.ct_config.fedora-coreos-snippets", "rendered", ignitionV32WithSnippetsExpected),
+					r.TestCheckResourceAttr("data.ignition_config.fedora-coreos-snippets", "rendered", ignitionV32WithSnippetsExpected),
 				),
 			},
 			{
 				Config: fedoraCoreOSV13WithSnippetsPrettyFalse,
 				Check: r.ComposeTestCheckFunc(
-					r.TestCheckResourceAttr("data.ct_config.fedora-coreos-snippets", "rendered", ignitionV32WithSnippetsPrettyFalseExpected),
+					r.TestCheckResourceAttr("data.ignition_config.fedora-coreos-snippets", "rendered", ignitionV32WithSnippetsPrettyFalseExpected),
 				),
 			},
 		},
@@ -632,7 +632,7 @@ func TestButaneConfig_FCOSv1_3(t *testing.T) {
 // Fedora CoreOS variant, v1.2.0
 
 const fedoraCoreOSV12Resource = `
-data "ct_config" "fedora-coreos" {
+data "ignition_config" "fedora-coreos" {
   pretty_print = true
   strict = true
   content = <<EOT
@@ -653,7 +653,7 @@ EOT
 `
 
 const fedoraCoreOSV12WithSnippets = `
-data "ct_config" "fedora-coreos-snippets" {
+data "ignition_config" "fedora-coreos-snippets" {
   pretty_print = true
   strict = true
   content = <<EOT
@@ -681,7 +681,7 @@ EOT
 `
 
 const fedoraCoreOSV12WithSnippetsPrettyFalse = `
-data "ct_config" "fedora-coreos-snippets" {
+data "ignition_config" "fedora-coreos-snippets" {
   pretty_print = false
   strict = true
   content = <<EOT
@@ -715,19 +715,19 @@ func TestButaneConfig_FCOSv1_2(t *testing.T) {
 			{
 				Config: fedoraCoreOSV12Resource,
 				Check: r.ComposeTestCheckFunc(
-					r.TestCheckResourceAttr("data.ct_config.fedora-coreos", "rendered", ignitionV32Expected),
+					r.TestCheckResourceAttr("data.ignition_config.fedora-coreos", "rendered", ignitionV32Expected),
 				),
 			},
 			{
 				Config: fedoraCoreOSV12WithSnippets,
 				Check: r.ComposeTestCheckFunc(
-					r.TestCheckResourceAttr("data.ct_config.fedora-coreos-snippets", "rendered", ignitionV32WithSnippetsExpected),
+					r.TestCheckResourceAttr("data.ignition_config.fedora-coreos-snippets", "rendered", ignitionV32WithSnippetsExpected),
 				),
 			},
 			{
 				Config: fedoraCoreOSV12WithSnippetsPrettyFalse,
 				Check: r.ComposeTestCheckFunc(
-					r.TestCheckResourceAttr("data.ct_config.fedora-coreos-snippets", "rendered", ignitionV32WithSnippetsPrettyFalseExpected),
+					r.TestCheckResourceAttr("data.ignition_config.fedora-coreos-snippets", "rendered", ignitionV32WithSnippetsPrettyFalseExpected),
 				),
 			},
 		},
@@ -737,7 +737,7 @@ func TestButaneConfig_FCOSv1_2(t *testing.T) {
 // Fedora CoreOS variant, v1.1.0
 
 const fedoraCoreOSV11Resource = `
-data "ct_config" "fedora-coreos" {
+data "ignition_config" "fedora-coreos" {
   pretty_print = true
   strict = true
   content = <<EOT
@@ -810,7 +810,7 @@ const ignitionV31Expected = `{
 }`
 
 const fedoraCoreOSV11WithSnippets = `
-data "ct_config" "fedora-coreos-snippets" {
+data "ignition_config" "fedora-coreos-snippets" {
   pretty_print = true
   strict = true
   content = <<EOT
@@ -838,7 +838,7 @@ EOT
 `
 
 const fedoraCoreOSV11WithSnippetsPrettyFalse = `
-data "ct_config" "fedora-coreos-snippets" {
+data "ignition_config" "fedora-coreos-snippets" {
   pretty_print = false
   strict = true
   content = <<EOT
@@ -872,19 +872,19 @@ func TestButaneConfig_FCOSv1_1(t *testing.T) {
 			{
 				Config: fedoraCoreOSV11Resource,
 				Check: r.ComposeTestCheckFunc(
-					r.TestCheckResourceAttr("data.ct_config.fedora-coreos", "rendered", ignitionV31Expected),
+					r.TestCheckResourceAttr("data.ignition_config.fedora-coreos", "rendered", ignitionV31Expected),
 				),
 			},
 			{
 				Config: fedoraCoreOSV11WithSnippets,
 				Check: r.ComposeTestCheckFunc(
-					r.TestCheckResourceAttr("data.ct_config.fedora-coreos-snippets", "rendered", ignitionV31WithSnippetsExpected),
+					r.TestCheckResourceAttr("data.ignition_config.fedora-coreos-snippets", "rendered", ignitionV31WithSnippetsExpected),
 				),
 			},
 			{
 				Config: fedoraCoreOSV11WithSnippetsPrettyFalse,
 				Check: r.ComposeTestCheckFunc(
-					r.TestCheckResourceAttr("data.ct_config.fedora-coreos-snippets", "rendered", ignitionV31WithSnippetsPrettyFalseExpected),
+					r.TestCheckResourceAttr("data.ignition_config.fedora-coreos-snippets", "rendered", ignitionV31WithSnippetsPrettyFalseExpected),
 				),
 			},
 		},
@@ -894,7 +894,7 @@ func TestButaneConfig_FCOSv1_1(t *testing.T) {
 // Fedora CoreOS variant, v1.0.0
 
 const fedoraCoreOSV10Resource = `
-data "ct_config" "fedora-coreos" {
+data "ignition_config" "fedora-coreos" {
   pretty_print = true
   strict = true
   content = <<EOT
@@ -911,7 +911,7 @@ EOT
 `
 
 const fedoraCoreOSV10WithSnippets = `
-data "ct_config" "fedora-coreos-snippets" {
+data "ignition_config" "fedora-coreos-snippets" {
   pretty_print = true
   strict = true
   content = <<EOT
@@ -939,7 +939,7 @@ EOT
 `
 
 const fedoraCoreOSV10WithSnippetsPrettyFalse = `
-data "ct_config" "fedora-coreos-snippets" {
+data "ignition_config" "fedora-coreos-snippets" {
   pretty_print = false
   strict = true
   content = <<EOT
@@ -973,19 +973,19 @@ func TestButaneConfig_FCOSv1_0(t *testing.T) {
 			{
 				Config: fedoraCoreOSV10Resource,
 				Check: r.ComposeTestCheckFunc(
-					r.TestCheckResourceAttr("data.ct_config.fedora-coreos", "rendered", ignitionV30Expected),
+					r.TestCheckResourceAttr("data.ignition_config.fedora-coreos", "rendered", ignitionV30Expected),
 				),
 			},
 			{
 				Config: fedoraCoreOSV10WithSnippets,
 				Check: r.ComposeTestCheckFunc(
-					r.TestCheckResourceAttr("data.ct_config.fedora-coreos-snippets", "rendered", ignitionV30WithSnippetsExpected),
+					r.TestCheckResourceAttr("data.ignition_config.fedora-coreos-snippets", "rendered", ignitionV30WithSnippetsExpected),
 				),
 			},
 			{
 				Config: fedoraCoreOSV10WithSnippetsPrettyFalse,
 				Check: r.ComposeTestCheckFunc(
-					r.TestCheckResourceAttr("data.ct_config.fedora-coreos-snippets", "rendered", ignitionV30WithSnippetsPrettyFalseExpected),
+					r.TestCheckResourceAttr("data.ignition_config.fedora-coreos-snippets", "rendered", ignitionV30WithSnippetsPrettyFalseExpected),
 				),
 			},
 		},
@@ -993,7 +993,7 @@ func TestButaneConfig_FCOSv1_0(t *testing.T) {
 }
 
 const fedoraCoreOSMixSnippetBehind = `
-data "ct_config" "fedora-coreos-mix-versions" {
+data "ignition_config" "fedora-coreos-mix-versions" {
   pretty_print = true
   strict = true
   content = <<EOT
@@ -1063,7 +1063,7 @@ func TestFedoraCoreOSMix_SnippetBehind(t *testing.T) {
 			{
 				Config: fedoraCoreOSMixSnippetBehind,
 				Check: r.ComposeTestCheckFunc(
-					r.TestCheckResourceAttr("data.ct_config.fedora-coreos-mix-versions", "rendered", ignitionV33MixExpected),
+					r.TestCheckResourceAttr("data.ignition_config.fedora-coreos-mix-versions", "rendered", ignitionV33MixExpected),
 				),
 			},
 		},
@@ -1071,7 +1071,7 @@ func TestFedoraCoreOSMix_SnippetBehind(t *testing.T) {
 }
 
 const fedoraCoreOSMixSnippetAhead = `
-data "ct_config" "fedora-coreos-mix-versions" {
+data "ignition_config" "fedora-coreos-mix-versions" {
   pretty_print = true
   strict = true
   content = <<EOT
@@ -1111,7 +1111,7 @@ func TestFedoraCoreOSMixVersions_SnippetAhead(t *testing.T) {
 }
 
 const invalidResource = `
-data "ct_config" "invalid" {
+data "ignition_config" "invalid" {
   content = "foo"
   strict = true
   some_invalid_field = "strict-mode-will-reject"

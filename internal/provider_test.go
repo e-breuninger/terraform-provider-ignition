@@ -7,7 +7,7 @@ import (
 )
 
 var testProviders = map[string]*schema.Provider{
-	"ct": Provider(),
+	"ignition": Provider(),
 }
 
 func TestProvider(t *testing.T) {

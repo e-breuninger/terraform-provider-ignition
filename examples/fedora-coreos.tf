@@ -1,5 +1,5 @@
 # Butane Config for Fedora CoreOS
-data "ct_config" "fedora-coreos-config" {
+data "ignition_config" "fedora-coreos-config" {
   content = templatefile("${path.module}/content/fcos.yaml", {
     message = "Hello World!"
   })
@@ -13,6 +13,6 @@ data "ct_config" "fedora-coreos-config" {
 
 # Render as Ignition
 resource "local_file" "fedora-coreos" {
-  content  = data.ct_config.fedora-coreos-config.rendered
+  content  = data.ignition_config.fedora-coreos-config.rendered
   filename = "${path.module}/output/fedora-coreos.ign"
 }

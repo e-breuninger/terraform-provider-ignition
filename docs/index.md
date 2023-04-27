@@ -1,19 +1,24 @@
-# config-transpiler Provider
+# Ignition provider
 
-`terraform-provider-ct` allows Terraform to validate a [Butane config](https://coreos.github.io/butane/specs/) and transpile to an [Ignition config](https://coreos.github.io/ignition/) for machine consumption.
+`terraform-provider-ignition` allows Terraform to validate a [Butane config](https://coreos.github.io/butane/specs/) and transpile to an [Ignition config](https://coreos.github.io/ignition/) for machine consumption.
+
+The Butane configuration is transpiled to the corresponding ignition version according to the [Butane specification](https://coreos.github.io/butane/specs/#butane-specifications-and-ignition-specifications).  
+The Butane version is taken from the `content` attribute.
+
+The Ignition versions `3.0.0`, `3.1.0`, `3.2.0`, `3.3.0` and `3.4.0` are supported.
 
 ## Usage
 
 Configure the config transpiler provider (e.g. `providers.tf`).
 
 ```tf
-provider "ct" {}
+provider "ignition" {}
 
 terraform {
   required_providers {
-    ct = {
-      source  = "poseidon/ct"
-      version = "0.13.0"
+    ignition = {
+      source  = "e-breuninger/ignition"
+      version = "1.0.0"
     }
   }
 }
@@ -41,10 +46,10 @@ passwd:
         - ssh-key foo
 ```
 
-Define a `ct_config` data source with strict validation.
+Define a `ignition_config` data source with strict validation.
 
 ```tf
-data "ct_config" "worker" {
+data "ignition_config" "worker" {
   content      = file("worker.yaml")
   strict       = true
   pretty_print = false
@@ -59,7 +64,7 @@ data "ct_config" "worker" {
 Optionally, template the `content`.
 
 ```tf
-data "ct_config" "worker" {
+data "ignition_config" "worker" {
   content = templatefile("worker.yaml", {
     ssh_authorized_key = "ssh-ed25519 AAAA...",
   })
@@ -67,11 +72,11 @@ data "ct_config" "worker" {
 }
 ```
 
-Render the `ct_config` as Ignition for use by machine instances.
+Render the `ignition_config` as Ignition for use by machine instances.
 
 ```tf
 resource "aws_instance" "worker" {
-  user_data = data.ct_config.worker.rendered
+  user_data = data.ignition_config.worker.rendered
 }
 ```
 
@@ -80,4 +85,3 @@ Run `terraform init` to ensure plugin version requirements are met.
 ```
 $ terraform init
 ```
-
