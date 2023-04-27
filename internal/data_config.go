@@ -101,7 +101,7 @@ func getLibraryForVersion(version string) (ignitionInterface, error) {
 	return ignition, nil
 }
 
-func DatasourceConfig() *schema.Resource {
+func datasourceConfig() *schema.Resource {
 	return &schema.Resource{
 		ReadContext: datasourceConfigRead,
 
