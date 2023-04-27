@@ -221,7 +221,7 @@ func mergeFCCSnippets(ignBytes []byte, pretty, strict bool, snippets []string) (
 		snippetSemver, _, _ := ignition_util.GetConfigVersion(ignextBytes)
 		versionIsIncompatible := semver.LessThan(snippetSemver)
 		if versionIsIncompatible {
-			return nil, fmt.Errorf("Snippet version %s is newer than content version %s and therefor incompatible", snippetSemver.String(), semver.String())
+			return nil, fmt.Errorf("Snippet version %s is newer than content version %s and therefore incompatible", snippetSemver.String(), semver.String())
 		}
 
 		ignext, _, err := ignition.Parse(ignextBytes)

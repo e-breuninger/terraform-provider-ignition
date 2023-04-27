@@ -1104,7 +1104,7 @@ func TestFedoraCoreOSMixVersions_SnippetAhead(t *testing.T) {
 		Steps: []r.TestStep{
 			{
 				Config:      fedoraCoreOSMixSnippetAhead,
-				ExpectError: regexp.MustCompile("Snippet version 3\\.3\\.0 is newer than content version 3\\.2\\.0 and therefor incompatible"),
+				ExpectError: regexp.MustCompile("Snippet version 3\\.3\\.0 is newer than content version 3\\.2\\.0 and therefore incompatible"),
 			},
 		},
 	})
