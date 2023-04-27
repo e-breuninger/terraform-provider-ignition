@@ -1,0 +1,32 @@
+name: semver-release
+on:
+  push:
+    branches: [ master ]
+jobs:
+  semantic-release:
+    permissions:
+      contents: write # to be able to publish a GitHub release
+      issues: write # to be able to comment on released issues
+      pull-requests: write # to be able to comment on released pull requests
+      id-token: write # to enable use of OIDC for npm provenance
+    runs-on: ubuntu-latest
+    container:
+      image: node:18.12
+      options: --user 1001:123
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+      - name: Install semantic-release and plugins
+        run: npm install
+          semantic-release
+          @semantic-release/github
+          @semantic-release/changelog
+          @semantic-release/git
+          @semantic-release/exec
+          conventional-changelog-conventionalcommits
+      - name: Run semantic-release
+        run: npx semantic-release
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
