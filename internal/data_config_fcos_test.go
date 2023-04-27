@@ -134,6 +134,85 @@ passwd:
 EOT
 }
 `
+const ignitionV32Expected = `{
+  "ignition": {
+    "config": {
+      "replace": {
+        "verification": {}
+      }
+    },
+    "proxy": {},
+    "security": {
+      "tls": {}
+    },
+    "timeouts": {},
+    "version": "3.2.0"
+  },
+  "passwd": {
+    "users": [
+      {
+        "name": "core",
+        "sshAuthorizedKeys": [
+          "key"
+        ]
+      }
+    ]
+  },
+  "storage": {
+    "luks": [
+      {
+        "device": "/dev/vdb",
+        "keyFile": {
+          "verification": {}
+        },
+        "name": "data"
+      }
+    ]
+  },
+  "systemd": {}
+}`
+
+const ignitionV33Expected = `{
+  "ignition": {
+    "config": {
+      "replace": {
+        "verification": {}
+      }
+    },
+    "proxy": {},
+    "security": {
+      "tls": {}
+    },
+    "timeouts": {},
+    "version": "3.3.0"
+  },
+  "kernelArguments": {},
+  "passwd": {
+    "users": [
+      {
+        "name": "core",
+        "sshAuthorizedKeys": [
+          "key"
+        ]
+      }
+    ]
+  },
+  "storage": {
+    "luks": [
+      {
+        "clevis": {
+          "custom": {}
+        },
+        "device": "/dev/vdb",
+        "keyFile": {
+          "verification": {}
+        },
+        "name": "data"
+      }
+    ]
+  },
+  "systemd": {}
+}`
 
 const ignitionV34Expected = `{
   "ignition": {
@@ -205,6 +284,147 @@ EOT
 }
 `
 
+const ignitionV30WithSnippetsExpected = `{
+  "ignition": {
+    "config": {
+      "replace": {
+        "source": null,
+        "verification": {}
+      }
+    },
+    "security": {
+      "tls": {}
+    },
+    "timeouts": {},
+    "version": "3.0.0"
+  },
+  "passwd": {
+    "users": [
+      {
+        "name": "core",
+        "sshAuthorizedKeys": [
+          "key"
+        ]
+      }
+    ]
+  },
+  "storage": {},
+  "systemd": {
+    "units": [
+      {
+        "enabled": true,
+        "name": "docker.service"
+      }
+    ]
+  }
+}`
+
+const ignitionV31WithSnippetsExpected = `{
+  "ignition": {
+    "config": {
+      "replace": {
+        "verification": {}
+      }
+    },
+    "proxy": {},
+    "security": {
+      "tls": {}
+    },
+    "timeouts": {},
+    "version": "3.1.0"
+  },
+  "passwd": {
+    "users": [
+      {
+        "name": "core",
+        "sshAuthorizedKeys": [
+          "key"
+        ]
+      }
+    ]
+  },
+  "storage": {},
+  "systemd": {
+    "units": [
+      {
+        "enabled": true,
+        "name": "docker.service"
+      }
+    ]
+  }
+}`
+
+const ignitionV32WithSnippetsExpected = `{
+  "ignition": {
+    "config": {
+      "replace": {
+        "verification": {}
+      }
+    },
+    "proxy": {},
+    "security": {
+      "tls": {}
+    },
+    "timeouts": {},
+    "version": "3.2.0"
+  },
+  "passwd": {
+    "users": [
+      {
+        "name": "core",
+        "sshAuthorizedKeys": [
+          "key"
+        ]
+      }
+    ]
+  },
+  "storage": {},
+  "systemd": {
+    "units": [
+      {
+        "enabled": true,
+        "name": "docker.service"
+      }
+    ]
+  }
+}`
+
+const ignitionV33WithSnippetsExpected = `{
+  "ignition": {
+    "config": {
+      "replace": {
+        "verification": {}
+      }
+    },
+    "proxy": {},
+    "security": {
+      "tls": {}
+    },
+    "timeouts": {},
+    "version": "3.3.0"
+  },
+  "kernelArguments": {},
+  "passwd": {
+    "users": [
+      {
+        "name": "core",
+        "sshAuthorizedKeys": [
+          "key"
+        ]
+      }
+    ]
+  },
+  "storage": {},
+  "systemd": {
+    "units": [
+      {
+        "enabled": true,
+        "name": "docker.service"
+      }
+    ]
+  }
+}`
+
 const ignitionV34WithSnippetsExpected = `{
   "ignition": {
     "config": {
@@ -268,6 +488,13 @@ EOT
 	]
 }
 `
+const ignitionV30WithSnippetsPrettyFalseExpected = `{"ignition":{"config":{"replace":{"source":null,"verification":{}}},"security":{"tls":{}},"timeouts":{},"version":"3.0.0"},"passwd":{"users":[{"name":"core","sshAuthorizedKeys":["key"]}]},"storage":{},"systemd":{"units":[{"enabled":true,"name":"docker.service"}]}}`
+
+const ignitionV31WithSnippetsPrettyFalseExpected = `{"ignition":{"config":{"replace":{"verification":{}}},"proxy":{},"security":{"tls":{}},"timeouts":{},"version":"3.1.0"},"passwd":{"users":[{"name":"core","sshAuthorizedKeys":["key"]}]},"storage":{},"systemd":{"units":[{"enabled":true,"name":"docker.service"}]}}`
+
+const ignitionV32WithSnippetsPrettyFalseExpected = `{"ignition":{"config":{"replace":{"verification":{}}},"proxy":{},"security":{"tls":{}},"timeouts":{},"version":"3.2.0"},"passwd":{"users":[{"name":"core","sshAuthorizedKeys":["key"]}]},"storage":{},"systemd":{"units":[{"enabled":true,"name":"docker.service"}]}}`
+
+const ignitionV33WithSnippetsPrettyFalseExpected = `{"ignition":{"config":{"replace":{"verification":{}}},"proxy":{},"security":{"tls":{}},"timeouts":{},"version":"3.3.0"},"kernelArguments":{},"passwd":{"users":[{"name":"core","sshAuthorizedKeys":["key"]}]},"storage":{},"systemd":{"units":[{"enabled":true,"name":"docker.service"}]}}`
 
 const ignitionV34WithSnippetsPrettyFalseExpected = `{"ignition":{"config":{"replace":{"verification":{}}},"proxy":{},"security":{"tls":{}},"timeouts":{},"version":"3.4.0"},"kernelArguments":{},"passwd":{"users":[{"name":"core","sshAuthorizedKeys":["key"]}]},"storage":{},"systemd":{"units":[{"enabled":true,"name":"docker.service"}]}}`
 
@@ -278,19 +505,19 @@ func TestButaneConfig_FCOSv1_4(t *testing.T) {
 			{
 				Config: fedoraCoreOSV14Resource,
 				Check: r.ComposeTestCheckFunc(
-					r.TestCheckResourceAttr("data.ct_config.fedora-coreos", "rendered", ignitionV34Expected),
+					r.TestCheckResourceAttr("data.ct_config.fedora-coreos", "rendered", ignitionV33Expected),
 				),
 			},
 			{
 				Config: fedoraCoreOSV14WithSnippets,
 				Check: r.ComposeTestCheckFunc(
-					r.TestCheckResourceAttr("data.ct_config.fedora-coreos-snippets", "rendered", ignitionV34WithSnippetsExpected),
+					r.TestCheckResourceAttr("data.ct_config.fedora-coreos-snippets", "rendered", ignitionV33WithSnippetsExpected),
 				),
 			},
 			{
 				Config: fedoraCoreOSV14WithSnippetsPrettyFalse,
 				Check: r.ComposeTestCheckFunc(
-					r.TestCheckResourceAttr("data.ct_config.fedora-coreos-snippets", "rendered", ignitionV34WithSnippetsPrettyFalseExpected),
+					r.TestCheckResourceAttr("data.ct_config.fedora-coreos-snippets", "rendered", ignitionV33WithSnippetsPrettyFalseExpected),
 				),
 			},
 		},
@@ -383,19 +610,19 @@ func TestButaneConfig_FCOSv1_3(t *testing.T) {
 			{
 				Config: fedoraCoreOSV13Resource,
 				Check: r.ComposeTestCheckFunc(
-					r.TestCheckResourceAttr("data.ct_config.fedora-coreos", "rendered", ignitionV34Expected),
+					r.TestCheckResourceAttr("data.ct_config.fedora-coreos", "rendered", ignitionV32Expected),
 				),
 			},
 			{
 				Config: fedoraCoreOSV13WithSnippets,
 				Check: r.ComposeTestCheckFunc(
-					r.TestCheckResourceAttr("data.ct_config.fedora-coreos-snippets", "rendered", ignitionV34WithSnippetsExpected),
+					r.TestCheckResourceAttr("data.ct_config.fedora-coreos-snippets", "rendered", ignitionV32WithSnippetsExpected),
 				),
 			},
 			{
 				Config: fedoraCoreOSV13WithSnippetsPrettyFalse,
 				Check: r.ComposeTestCheckFunc(
-					r.TestCheckResourceAttr("data.ct_config.fedora-coreos-snippets", "rendered", ignitionV34WithSnippetsPrettyFalseExpected),
+					r.TestCheckResourceAttr("data.ct_config.fedora-coreos-snippets", "rendered", ignitionV32WithSnippetsPrettyFalseExpected),
 				),
 			},
 		},
@@ -488,19 +715,19 @@ func TestButaneConfig_FCOSv1_2(t *testing.T) {
 			{
 				Config: fedoraCoreOSV12Resource,
 				Check: r.ComposeTestCheckFunc(
-					r.TestCheckResourceAttr("data.ct_config.fedora-coreos", "rendered", ignitionV34Expected),
+					r.TestCheckResourceAttr("data.ct_config.fedora-coreos", "rendered", ignitionV32Expected),
 				),
 			},
 			{
 				Config: fedoraCoreOSV12WithSnippets,
 				Check: r.ComposeTestCheckFunc(
-					r.TestCheckResourceAttr("data.ct_config.fedora-coreos-snippets", "rendered", ignitionV34WithSnippetsExpected),
+					r.TestCheckResourceAttr("data.ct_config.fedora-coreos-snippets", "rendered", ignitionV32WithSnippetsExpected),
 				),
 			},
 			{
 				Config: fedoraCoreOSV12WithSnippetsPrettyFalse,
 				Check: r.ComposeTestCheckFunc(
-					r.TestCheckResourceAttr("data.ct_config.fedora-coreos-snippets", "rendered", ignitionV34WithSnippetsPrettyFalseExpected),
+					r.TestCheckResourceAttr("data.ct_config.fedora-coreos-snippets", "rendered", ignitionV32WithSnippetsPrettyFalseExpected),
 				),
 			},
 		},
@@ -526,8 +753,35 @@ EOT
 }
 `
 
-// Butane v1.2 added storage.luks, which we exercise
-const ignitionV34BeforeButaneV12 = `{
+const ignitionV30Expected = `{
+  "ignition": {
+    "config": {
+      "replace": {
+        "source": null,
+        "verification": {}
+      }
+    },
+    "security": {
+      "tls": {}
+    },
+    "timeouts": {},
+    "version": "3.0.0"
+  },
+  "passwd": {
+    "users": [
+      {
+        "name": "core",
+        "sshAuthorizedKeys": [
+          "key"
+        ]
+      }
+    ]
+  },
+  "storage": {},
+  "systemd": {}
+}`
+
+const ignitionV31Expected = `{
   "ignition": {
     "config": {
       "replace": {
@@ -539,9 +793,8 @@ const ignitionV34BeforeButaneV12 = `{
       "tls": {}
     },
     "timeouts": {},
-    "version": "3.4.0"
+    "version": "3.1.0"
   },
-  "kernelArguments": {},
   "passwd": {
     "users": [
       {
@@ -619,19 +872,19 @@ func TestButaneConfig_FCOSv1_1(t *testing.T) {
 			{
 				Config: fedoraCoreOSV11Resource,
 				Check: r.ComposeTestCheckFunc(
-					r.TestCheckResourceAttr("data.ct_config.fedora-coreos", "rendered", ignitionV34BeforeButaneV12),
+					r.TestCheckResourceAttr("data.ct_config.fedora-coreos", "rendered", ignitionV31Expected),
 				),
 			},
 			{
 				Config: fedoraCoreOSV11WithSnippets,
 				Check: r.ComposeTestCheckFunc(
-					r.TestCheckResourceAttr("data.ct_config.fedora-coreos-snippets", "rendered", ignitionV34WithSnippetsExpected),
+					r.TestCheckResourceAttr("data.ct_config.fedora-coreos-snippets", "rendered", ignitionV31WithSnippetsExpected),
 				),
 			},
 			{
 				Config: fedoraCoreOSV11WithSnippetsPrettyFalse,
 				Check: r.ComposeTestCheckFunc(
-					r.TestCheckResourceAttr("data.ct_config.fedora-coreos-snippets", "rendered", ignitionV34WithSnippetsPrettyFalseExpected),
+					r.TestCheckResourceAttr("data.ct_config.fedora-coreos-snippets", "rendered", ignitionV31WithSnippetsPrettyFalseExpected),
 				),
 			},
 		},
@@ -720,19 +973,19 @@ func TestButaneConfig_FCOSv1_0(t *testing.T) {
 			{
 				Config: fedoraCoreOSV10Resource,
 				Check: r.ComposeTestCheckFunc(
-					r.TestCheckResourceAttr("data.ct_config.fedora-coreos", "rendered", ignitionV34BeforeButaneV12),
+					r.TestCheckResourceAttr("data.ct_config.fedora-coreos", "rendered", ignitionV30Expected),
 				),
 			},
 			{
 				Config: fedoraCoreOSV10WithSnippets,
 				Check: r.ComposeTestCheckFunc(
-					r.TestCheckResourceAttr("data.ct_config.fedora-coreos-snippets", "rendered", ignitionV34WithSnippetsExpected),
+					r.TestCheckResourceAttr("data.ct_config.fedora-coreos-snippets", "rendered", ignitionV30WithSnippetsExpected),
 				),
 			},
 			{
 				Config: fedoraCoreOSV10WithSnippetsPrettyFalse,
 				Check: r.ComposeTestCheckFunc(
-					r.TestCheckResourceAttr("data.ct_config.fedora-coreos-snippets", "rendered", ignitionV34WithSnippetsPrettyFalseExpected),
+					r.TestCheckResourceAttr("data.ct_config.fedora-coreos-snippets", "rendered", ignitionV30WithSnippetsPrettyFalseExpected),
 				),
 			},
 		},
@@ -767,7 +1020,7 @@ EOT
 }
 `
 
-const ignitionV34MixExpected = `{
+const ignitionV33MixExpected = `{
   "ignition": {
     "config": {
       "replace": {
@@ -779,7 +1032,7 @@ const ignitionV34MixExpected = `{
       "tls": {}
     },
     "timeouts": {},
-    "version": "3.4.0"
+    "version": "3.3.0"
   },
   "kernelArguments": {},
   "passwd": {
@@ -810,7 +1063,7 @@ func TestFedoraCoreOSMix_SnippetBehind(t *testing.T) {
 			{
 				Config: fedoraCoreOSMixSnippetBehind,
 				Check: r.ComposeTestCheckFunc(
-					r.TestCheckResourceAttr("data.ct_config.fedora-coreos-mix-versions", "rendered", ignitionV34MixExpected),
+					r.TestCheckResourceAttr("data.ct_config.fedora-coreos-mix-versions", "rendered", ignitionV33MixExpected),
 				),
 			},
 		},
@@ -850,10 +1103,8 @@ func TestFedoraCoreOSMixVersions_SnippetAhead(t *testing.T) {
 		Providers: testProviders,
 		Steps: []r.TestStep{
 			{
-				Config: fedoraCoreOSMixSnippetAhead,
-				Check: r.ComposeTestCheckFunc(
-					r.TestCheckResourceAttr("data.ct_config.fedora-coreos-mix-versions", "rendered", ignitionV34MixExpected),
-				),
+				Config:      fedoraCoreOSMixSnippetAhead,
+				ExpectError: regexp.MustCompile("Snippet version 3\\.3\\.0 is newer than content version 3\\.2\\.0 and therefor incompatible"),
 			},
 		},
 	})

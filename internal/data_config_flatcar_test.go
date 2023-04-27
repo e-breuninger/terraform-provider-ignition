@@ -133,6 +133,47 @@ passwd:
 EOT
 }
 `
+const flatcarV10Expected = `{
+  "ignition": {
+    "config": {
+      "replace": {
+        "verification": {}
+      }
+    },
+    "proxy": {},
+    "security": {
+      "tls": {}
+    },
+    "timeouts": {},
+    "version": "3.3.0"
+  },
+  "kernelArguments": {},
+  "passwd": {
+    "users": [
+      {
+        "name": "core",
+        "sshAuthorizedKeys": [
+          "key"
+        ]
+      }
+    ]
+  },
+  "storage": {
+    "luks": [
+      {
+        "clevis": {
+          "custom": {}
+        },
+        "device": "/dev/vdb",
+        "keyFile": {
+          "verification": {}
+        },
+        "name": "data"
+      }
+    ]
+  },
+  "systemd": {}
+}`
 
 const flatcarExpected = `{
   "ignition": {
@@ -204,6 +245,42 @@ EOT
 }
 `
 
+const flatcarV10WithSnippetsExpected = `{
+  "ignition": {
+    "config": {
+      "replace": {
+        "verification": {}
+      }
+    },
+    "proxy": {},
+    "security": {
+      "tls": {}
+    },
+    "timeouts": {},
+    "version": "3.3.0"
+  },
+  "kernelArguments": {},
+  "passwd": {
+    "users": [
+      {
+        "name": "core",
+        "sshAuthorizedKeys": [
+          "key"
+        ]
+      }
+    ]
+  },
+  "storage": {},
+  "systemd": {
+    "units": [
+      {
+        "enabled": true,
+        "name": "docker.service"
+      }
+    ]
+  }
+}`
+
 const flatcarWithSnippetsExpected = `{
   "ignition": {
     "config": {
@@ -267,6 +344,7 @@ EOT
 	]
 }
 `
+const flatcarV10WithSnippetsPrettyFalseExpected = `{"ignition":{"config":{"replace":{"verification":{}}},"proxy":{},"security":{"tls":{}},"timeouts":{},"version":"3.3.0"},"kernelArguments":{},"passwd":{"users":[{"name":"core","sshAuthorizedKeys":["key"]}]},"storage":{},"systemd":{"units":[{"enabled":true,"name":"docker.service"}]}}`
 
 const flatcarWithSnippetsPrettyFalseExpected = `{"ignition":{"config":{"replace":{"verification":{}}},"proxy":{},"security":{"tls":{}},"timeouts":{},"version":"3.4.0"},"kernelArguments":{},"passwd":{"users":[{"name":"core","sshAuthorizedKeys":["key"]}]},"storage":{},"systemd":{"units":[{"enabled":true,"name":"docker.service"}]}}`
 
@@ -277,19 +355,19 @@ func TestButaneConfig_Flatcar_v1_0(t *testing.T) {
 			{
 				Config: flatcarV10Resource,
 				Check: r.ComposeTestCheckFunc(
-					r.TestCheckResourceAttr("data.ct_config.flatcar", "rendered", flatcarExpected),
+					r.TestCheckResourceAttr("data.ct_config.flatcar", "rendered", flatcarV10Expected),
 				),
 			},
 			{
 				Config: flatcarV10WithSnippets,
 				Check: r.ComposeTestCheckFunc(
-					r.TestCheckResourceAttr("data.ct_config.flatcar-snippets", "rendered", flatcarWithSnippetsExpected),
+					r.TestCheckResourceAttr("data.ct_config.flatcar-snippets", "rendered", flatcarV10WithSnippetsExpected),
 				),
 			},
 			{
 				Config: flatcarV10WithSnippetsPrettyFalse,
 				Check: r.ComposeTestCheckFunc(
-					r.TestCheckResourceAttr("data.ct_config.flatcar-snippets", "rendered", flatcarWithSnippetsPrettyFalseExpected),
+					r.TestCheckResourceAttr("data.ct_config.flatcar-snippets", "rendered", flatcarV10WithSnippetsPrettyFalseExpected),
 				),
 			},
 		},
