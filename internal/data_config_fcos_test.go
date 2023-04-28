@@ -1113,7 +1113,6 @@ func TestFedoraCoreOSMixVersions_SnippetAhead(t *testing.T) {
 const invalidResource = `
 data "ignition_config" "invalid" {
   content = "foo"
-  strict = true
   some_invalid_field = "strict-mode-will-reject"
 }
 `
@@ -1125,6 +1124,79 @@ func TestInvalidResource(t *testing.T) {
 			{
 				Config:      invalidResource,
 				ExpectError: regexp.MustCompile(`An argument named "some_invalid_field" is not expected here`),
+			},
+		},
+	})
+}
+
+const invalidYaml = `
+data "ignition_config" "invalid" {
+  content = "foo"
+}
+`
+
+func TestInvalidYaml(t *testing.T) {
+	r.UnitTest(t, r.TestCase{
+		Providers: testProviders,
+		Steps: []r.TestStep{
+			{
+				Config:      invalidYaml,
+				ExpectError: regexp.MustCompile(`Error unmarshaling yaml: yaml: unmarshal errors`),
+			},
+		},
+	})
+}
+
+const invalidButane = `
+data "ignition_config" "invalid" {
+  strict = true
+  content = <<EOT
+---
+variant: fcos
+version: 1.2.0
+foo: bar
+EOT
+}
+`
+
+func TestInvalidButane(t *testing.T) {
+	r.UnitTest(t, r.TestCase{
+		Providers: testProviders,
+		Steps: []r.TestStep{
+			{
+				Config:      invalidButane,
+				ExpectError: regexp.MustCompile(`strict parsing error: warning at \$\.foo`),
+			},
+		},
+	})
+}
+
+const invalidSnippetButane = `
+data "ignition_config" "invalid" {
+  strict = true
+  content = <<EOT
+---
+variant: fcos
+version: 1.2.0
+EOT
+  snippets = [
+<<EOT
+---
+variant: fcos
+version: 1.2.0
+foo: bar
+EOT
+	]
+}
+`
+
+func TestInvalidSnippetButane(t *testing.T) {
+	r.UnitTest(t, r.TestCase{
+		Providers: testProviders,
+		Steps: []r.TestStep{
+			{
+				Config:      invalidSnippetButane,
+				ExpectError: regexp.MustCompile(`strict parsing error: warning at \$\.foo`),
 			},
 		},
 	})
