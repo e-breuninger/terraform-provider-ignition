@@ -26,8 +26,10 @@ jobs:
           mkdir -p ~/.cache/pre-commit
       - name: Install job dependencies
         run: |
+          export GOPATH=$(realpath $GOPATH)
           apk add --cache-dir $APK_CACHE_DIR go python3-dev py3-pip git gcc musl-dev
           go install github.com/kisielk/errcheck@v1.6.3
+          go install honnef.co/go/tools/cmd/staticcheck@v0.4.3
           pip install pre-commit
       - name: Checkout code
         uses: actions/checkout@v3
@@ -37,4 +39,5 @@ jobs:
         run: |
           git config --global --add safe.directory $PWD
           export GOPATH=$(realpath $GOPATH)
+          export PATH=/usr/local/go/bin:$GOPATH/bin:$PATH
           pre-commit run --all-files --color=always --show-diff-on-failure
