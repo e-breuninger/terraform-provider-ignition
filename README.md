@@ -90,16 +90,6 @@ $ terraform init
 
 * Terraform v0.13+ [installed](https://www.terraform.io/downloads.html)
 
-## Development
-
-### Binary
-
-To develop the provider plugin locally, build an executable with Go v1.18+.
-
-```
-make
-```
-
 ## Credits
 
 This provider is a fork of the terraform provider [poseidon/ct](https://github.com/poseidon/terraform-provider-ct)
