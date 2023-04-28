@@ -8,14 +8,32 @@ jobs:
     runs-on: ubuntu-latest
     container:
       image: alpine:3.17
+    env:
+      GOPATH: ~/.cache/go
+      APK_CACHE_DIR: ~/.cache/apk
     steps:
       - name: Install job dependencies
+        run: apk add tar
+      - uses: actions/cache@v3
+        with:
+          path: ~/.cache
+          key: pre-commit
+      - name: Ensure cache directories
         run: |
-          apk add go python3-dev py3-pip git gcc musl-dev
+          mkdir -p $APK_CACHE_DIR
+          mkdir -p $GOPATH
+          mkdir -p ~/.cache/pip
+          mkdir -p ~/.cache/pre-commit
+      - name: Install job dependencies
+        run: |
+          apk add --cache-dir $APK_CACHE_DIR go python3-dev py3-pip git gcc musl-dev
           pip install pre-commit
       - name: Checkout code
         uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
       - name: Run pre-commit-hooks
         run: |
           git config --global --add safe.directory $PWD
+          export GOPATH=$(realpath $GOPATH)
           pre-commit run --all-files --color=always --show-diff-on-failure

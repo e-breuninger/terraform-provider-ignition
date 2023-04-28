@@ -13,16 +13,24 @@ jobs:
       id-token: write # to enable use of OIDC for npm provenance
     runs-on: ubuntu-latest
     container:
-      image: node:18.12
-      options: --user 1001:123
+      image: node:lts-alpine3.17
+    env:
+      NPM_CACHE_DIR: ~/.cache/npm
+      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     if: ${{ github.event.workflow_run.conclusion == 'success' }}
     steps:
+      - name: Install job dependencies
+        run: apk add tar git
+      - uses: actions/cache@v3
+        with:
+          path: ~/.cache
+          key: semantic-release
       - name: Checkout code
         uses: actions/checkout@v3
         with:
           fetch-depth: 0
       - name: Install semantic-release and plugins
-        run: npm install
+        run: npm install --cache $NPM_CACHE_DIR
           semantic-release
           @semantic-release/github
           @semantic-release/changelog
@@ -30,6 +38,6 @@ jobs:
           @semantic-release/exec
           conventional-changelog-conventionalcommits
       - name: Run semantic-release
-        run: npx semantic-release
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          git config --global --add safe.directory $PWD
+          npx semantic-release
