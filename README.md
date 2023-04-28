@@ -1,6 +1,6 @@
 # terraform-provider-ignition
 
-`terraform-provider-ignition` allows Terraform to validate a [Butane config](https://coreos.github.io/butane/specs/) and transpile to an [Ignition config](https://coreos.github.io/ignition/) for machine consumption.
+`terraform-provider-ignition` allows Terraform to validate a [Butane configuration](https://coreos.github.io/butane/specs/) and transpile it to an [Ignition configuration](https://coreos.github.io/ignition/).
 
 The Butane configuration is transpiled to the corresponding ignition version according to the [Butane specification](https://coreos.github.io/butane/specs/#butane-specifications-and-ignition-specifications).  
 The Butane version is taken from the `content` attribute.
