@@ -1,7 +1,9 @@
-name: semver-release
+name: semantic-release
 on:
-  push:
-    branches: [ master ]
+  workflow_run:
+    workflows: [pre-commit]
+    types: [completed]
+    branches: [master]
 jobs:
   semantic-release:
     permissions:
@@ -13,6 +15,7 @@ jobs:
     container:
       image: node:18.12
       options: --user 1001:123
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
