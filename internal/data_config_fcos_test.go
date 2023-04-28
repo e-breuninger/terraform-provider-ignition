@@ -1141,7 +1141,30 @@ func TestInvalidYaml(t *testing.T) {
 		Steps: []r.TestStep{
 			{
 				Config:      invalidYaml,
-				ExpectError: regexp.MustCompile(`Error unmarshaling yaml: yaml: unmarshal errors`),
+				ExpectError: regexp.MustCompile(`content parse error: Error unmarshaling yaml: yaml: unmarshal errors`),
+			},
+		},
+	})
+}
+
+const invalidSnippetYaml = `
+data "ignition_config" "invalid" {
+  content = <<EOT
+---
+variant: fcos
+version: 1.2.0
+EOT
+  snippets = ["foo"]
+}
+`
+
+func TestInvalidSnippetYaml(t *testing.T) {
+	r.UnitTest(t, r.TestCase{
+		Providers: testProviders,
+		Steps: []r.TestStep{
+			{
+				Config:      invalidSnippetYaml,
+				ExpectError: regexp.MustCompile(`snippet parse error: Error unmarshaling yaml: yaml: unmarshal errors`),
 			},
 		},
 	})
@@ -1165,7 +1188,7 @@ func TestInvalidButane(t *testing.T) {
 		Steps: []r.TestStep{
 			{
 				Config:      invalidButane,
-				ExpectError: regexp.MustCompile(`strict parsing error: warning at \$\.foo`),
+				ExpectError: regexp.MustCompile(`content parse error: strict parsing error: warning at \$\.foo`),
 			},
 		},
 	})
@@ -1196,7 +1219,51 @@ func TestInvalidSnippetButane(t *testing.T) {
 		Steps: []r.TestStep{
 			{
 				Config:      invalidSnippetButane,
-				ExpectError: regexp.MustCompile(`strict parsing error: warning at \$\.foo`),
+				ExpectError: regexp.MustCompile(`snippet parse error: strict parsing error: warning at \$\.foo`),
+			},
+		},
+	})
+}
+
+const incompatibleVersion = `
+data "ignition_config" "incompatible" {
+  content = <<EOT
+---
+variant: fcos
+version: 1.6.0-experimental
+EOT
+}
+`
+
+func TestIncompatibleVersion(t *testing.T) {
+	r.UnitTest(t, r.TestCase{
+		Providers: testProviders,
+		Steps: []r.TestStep{
+			{
+				Config:      incompatibleVersion,
+				ExpectError: regexp.MustCompile(`content parse error: incompatible version`),
+			},
+		},
+	})
+}
+
+const unsupportedVersion = `
+data "ignition_config" "unsupported" {
+  content = <<EOT
+---
+variant: fcos
+version: 9.9.9
+EOT
+}
+`
+
+func TestUnsupportedVersion(t *testing.T) {
+	r.UnitTest(t, r.TestCase{
+		Providers: testProviders,
+		Steps: []r.TestStep{
+			{
+				Config:      unsupportedVersion,
+				ExpectError: regexp.MustCompile(`content parse error: No translator exists for variant fcos with version 9.9.9`),
 			},
 		},
 	})
