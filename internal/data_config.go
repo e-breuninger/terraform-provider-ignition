@@ -11,6 +11,7 @@ import (
 
 	butane "github.com/coreos/butane/config"
 	"github.com/coreos/butane/config/common"
+	"github.com/coreos/go-semver/semver"
 	ignition_util "github.com/coreos/ignition/v2/config/util"
 	ignition_v3_0 "github.com/coreos/ignition/v2/config/v3_0"
 	types_v3_0 "github.com/coreos/ignition/v2/config/v3_0/types"
@@ -140,10 +141,11 @@ func datasourceConfig() *schema.Resource {
 func datasourceConfigRead(ctx context.Context, d *schema.ResourceData, meta interface{}) diag.Diagnostics {
 	var diags diag.Diagnostics
 
-	rendered, err := renderConfig(d)
+	renderedBytes, err := renderConfig(d)
 	if err != nil {
 		return diag.FromErr(err)
 	}
+	rendered := string(renderedBytes)
 
 	if err := d.Set("rendered", rendered); err != nil {
 		return diag.FromErr(err)
@@ -152,8 +154,9 @@ func datasourceConfigRead(ctx context.Context, d *schema.ResourceData, meta inte
 	return diags
 }
 
-// Render a Fedora CoreOS Config or Container Linux Config as Ignition JSON.
-func renderConfig(d *schema.ResourceData) (string, error) {
+type getConfigVersion func(ignition []byte) (semver.Version, error)
+
+func renderConfig(d *schema.ResourceData) ([]byte, error) {
 	// unchecked assertions seem to be the norm in Terraform :S
 	content := d.Get("content").(string)
 	pretty := d.Get("pretty_print").(bool)
@@ -168,75 +171,76 @@ func renderConfig(d *schema.ResourceData) (string, error) {
 		snippets[i] = v.(string)
 	}
 
-	// Butane Config
-	ign, err := butaneToIgnition([]byte(content), pretty, strict, snippets)
-	return string(ign), err
-}
-
-// Translate Fedora CoreOS config to Ignition v3.X.Y
-func butaneToIgnition(data []byte, pretty, strict bool, snippets []string) ([]byte, error) {
-	ignBytes, report, err := butane.TranslateBytes(data, common.TranslateBytesOptions{
-		Pretty: pretty,
-	})
-	// ErrNoVariant indicates data is a CLC, not an FCC
+	// transpile content
+	ignitionConfig, contentVersion, ignition, err := transpileButane(
+		content,
+		strict,
+		func(ignitionBytes []byte) (semver.Version, error) {
+			version, _, err := ignition_util.GetConfigVersion(ignitionBytes)
+			return version, err
+		},
+	)
 	if err != nil {
-		return nil, err
-	}
-	if strict && len(report.Entries) > 0 {
-		return nil, fmt.Errorf("strict parsing error: %v", report.String())
+		return nil, fmt.Errorf("content parse error: %v", err)
 	}
 
-	// merge FCC snippets into main Ignition config
-	return mergeFCCSnippets(ignBytes, pretty, strict, snippets)
-}
-
-// Parse Fedora CoreOS Ignition and Butane snippets into Ignition Config.
-func mergeFCCSnippets(ignBytes []byte, pretty, strict bool, snippets []string) ([]byte, error) {
-	semver, _, _ := ignition_util.GetConfigVersion(ignBytes)
-	ignition, err := getLibraryForVersion(semver.String())
-
-	if err != nil {
-		return nil, fmt.Errorf("%v", err)
-	}
-
-	ign, _, err := ignition.Parse(ignBytes)
-	if err != nil {
-		return nil, fmt.Errorf("%v", err)
-	}
-
+	// transpile snippets and merge them with content
 	for _, snippet := range snippets {
-		ignextBytes, report, err := butane.TranslateBytes([]byte(snippet), common.TranslateBytesOptions{
-			Pretty: pretty,
-		})
-		if err != nil {
-			// For FCC, require snippets be FCCs (don't fall-through to CLC)
-			if err == common.ErrNoVariant {
-				return nil, fmt.Errorf("butane snippets require `variant`: %v", err)
-			}
-			return nil, fmt.Errorf("butane translate error: %v", err)
-		}
-		if strict && len(report.Entries) > 0 {
-			return nil, fmt.Errorf("strict parsing error: %v", report.String())
-		}
-		snippetSemver, _, _ := ignition_util.GetConfigVersion(ignextBytes)
-		versionIsIncompatible := semver.LessThan(snippetSemver)
-		if versionIsIncompatible {
-			return nil, fmt.Errorf("snippet version %s is newer than content version %s and therefore incompatible", snippetSemver.String(), semver.String())
-		}
-
-		ignext, _, err := ignition.Parse(ignextBytes)
+		snippetIgnitionConfig, _, _, err := transpileButane(snippet, strict, ensureMaxVersion(contentVersion))
 		if err != nil {
 			return nil, fmt.Errorf("snippet parse error: %v", err)
 		}
-		ign = ignition.Merge(ign, ignext)
+		ignitionConfig = ignition.Merge(ignitionConfig, snippetIgnitionConfig)
 	}
 
-	return marshalJSON(ign, pretty)
+	// marshal json
+	if pretty {
+		return json.MarshalIndent(ignitionConfig, "", "  ")
+	}
+	return json.Marshal(ignitionConfig)
 }
 
-func marshalJSON(v interface{}, pretty bool) ([]byte, error) {
-	if pretty {
-		return json.MarshalIndent(v, "", "  ")
+// Transpile Butane into a Ignition configuration object determined by the Ignitition version given.
+// Returns the Ignition configuration object, the Ignition version used and the matching Ignition library
+func transpileButane(
+	butaneConfig string,
+	strict bool,
+	getIgnitionVersion getConfigVersion,
+) (interface{}, semver.Version, ignitionInterface, error) {
+	ignitionBytes, report, err := butane.TranslateBytes([]byte(butaneConfig), common.TranslateBytesOptions{})
+	if err != nil {
+		return nil, semver.Version{}, ignitionInterface{}, err
 	}
-	return json.Marshal(v)
+	if strict && len(report.Entries) > 0 {
+		return nil, semver.Version{}, ignitionInterface{}, fmt.Errorf("strict parsing error: %v", report.String())
+	}
+	version, err := getIgnitionVersion(ignitionBytes)
+	if err != nil {
+		return nil, semver.Version{}, ignitionInterface{}, err
+	}
+	ignition, err := getLibraryForVersion(version.String())
+	if err != nil {
+		return nil, semver.Version{}, ignitionInterface{}, err
+	}
+	ignitionConfig, _, err := ignition.Parse(ignitionBytes)
+
+	return ignitionConfig, version, ignition, err
+}
+
+// prepare function to validate snippets against
+func ensureMaxVersion(maxVersion semver.Version) getConfigVersion {
+	return func(ignitionBytes []byte) (semver.Version, error) {
+		version, _, err := ignition_util.GetConfigVersion(ignitionBytes)
+		if err != nil {
+			return semver.Version{}, err
+		}
+		if maxVersion.LessThan(version) {
+			return semver.Version{}, fmt.Errorf(
+				"version %s is newer than max version %s and therefore incompatible",
+				version.String(),
+				maxVersion.String(),
+			)
+		}
+		return maxVersion, nil
+	}
 }
