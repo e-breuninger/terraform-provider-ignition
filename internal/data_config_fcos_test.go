@@ -1104,7 +1104,7 @@ func TestFedoraCoreOSMixVersions_SnippetAhead(t *testing.T) {
 		Steps: []r.TestStep{
 			{
 				Config:      fedoraCoreOSMixSnippetAhead,
-				ExpectError: regexp.MustCompile("Snippet version 3\\.3\\.0 is newer than content version 3\\.2\\.0 and therefore incompatible"),
+				ExpectError: regexp.MustCompile(`snippet version 3\.3\.0 is newer than content version 3\.2\.0 and therefore incompatible`),
 			},
 		},
 	})
@@ -1124,7 +1124,7 @@ func TestInvalidResource(t *testing.T) {
 		Steps: []r.TestStep{
 			{
 				Config:      invalidResource,
-				ExpectError: regexp.MustCompile("An argument named \"some_invalid_field\" is not expected here"),
+				ExpectError: regexp.MustCompile(`An argument named "some_invalid_field" is not expected here`),
 			},
 		},
 	})

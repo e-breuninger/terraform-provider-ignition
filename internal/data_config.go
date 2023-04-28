@@ -71,23 +71,23 @@ type ignitionInterface struct {
 }
 
 var versionToLibrary = map[string]ignitionInterface{
-	"3.0.0": ignitionInterface{
+	"3.0.0": {
 		Parse: parseV30,
 		Merge: mergeV30,
 	},
-	"3.1.0": ignitionInterface{
+	"3.1.0": {
 		Parse: parseV31,
 		Merge: mergeV31,
 	},
-	"3.2.0": ignitionInterface{
+	"3.2.0": {
 		Parse: parseV32,
 		Merge: mergeV32,
 	},
-	"3.3.0": ignitionInterface{
+	"3.3.0": {
 		Parse: parseV33,
 		Merge: mergeV33,
 	},
-	"3.4.0": ignitionInterface{
+	"3.4.0": {
 		Parse: parseV34,
 		Merge: mergeV34,
 	},
@@ -96,7 +96,7 @@ var versionToLibrary = map[string]ignitionInterface{
 func getLibraryForVersion(version string) (ignitionInterface, error) {
 	ignition, ok := versionToLibrary[version]
 	if !ok {
-		return ignitionInterface{}, errors.New("Incompatible version")
+		return ignitionInterface{}, errors.New("incompatible version")
 	}
 	return ignition, nil
 }
@@ -211,9 +211,9 @@ func mergeFCCSnippets(ignBytes []byte, pretty, strict bool, snippets []string) (
 		if err != nil {
 			// For FCC, require snippets be FCCs (don't fall-through to CLC)
 			if err == common.ErrNoVariant {
-				return nil, fmt.Errorf("Butane snippets require `variant`: %v", err)
+				return nil, fmt.Errorf("butane snippets require `variant`: %v", err)
 			}
-			return nil, fmt.Errorf("Butane translate error: %v", err)
+			return nil, fmt.Errorf("butane translate error: %v", err)
 		}
 		if strict && len(report.Entries) > 0 {
 			return nil, fmt.Errorf("strict parsing error: %v", report.String())
@@ -221,7 +221,7 @@ func mergeFCCSnippets(ignBytes []byte, pretty, strict bool, snippets []string) (
 		snippetSemver, _, _ := ignition_util.GetConfigVersion(ignextBytes)
 		versionIsIncompatible := semver.LessThan(snippetSemver)
 		if versionIsIncompatible {
-			return nil, fmt.Errorf("Snippet version %s is newer than content version %s and therefore incompatible", snippetSemver.String(), semver.String())
+			return nil, fmt.Errorf("snippet version %s is newer than content version %s and therefore incompatible", snippetSemver.String(), semver.String())
 		}
 
 		ignext, _, err := ignition.Parse(ignextBytes)
