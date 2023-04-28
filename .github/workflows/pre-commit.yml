@@ -27,6 +27,7 @@ jobs:
       - name: Install job dependencies
         run: |
           apk add --cache-dir $APK_CACHE_DIR go python3-dev py3-pip git gcc musl-dev
+          go install github.com/kisielk/errcheck@v1.6.3
           pip install pre-commit
       - name: Checkout code
         uses: actions/checkout@v3
