@@ -13,11 +13,15 @@ jobs:
       APK_CACHE_DIR: ~/.cache/apk
     steps:
       - name: Install job dependencies
-        run: apk add tar
+        run: apk add tar git
       - uses: actions/cache@v3
         with:
           path: ~/.cache
           key: pre-commit
+      - name: Checkout code
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
       - name: Ensure cache directories
         run: |
           mkdir -p $APK_CACHE_DIR
@@ -27,14 +31,11 @@ jobs:
       - name: Install job dependencies
         run: |
           export GOPATH=$(realpath $GOPATH)
-          apk add --cache-dir $APK_CACHE_DIR go python3-dev py3-pip git gcc musl-dev
+          apk update --cache-dir $APK_CACHE_DIR
+          apk add --cache-dir $APK_CACHE_DIR go python3-dev py3-pip gcc musl-dev
           go install github.com/kisielk/errcheck@v1.6.3
           go install honnef.co/go/tools/cmd/staticcheck@v0.4.3
           pip install pre-commit
-      - name: Checkout code
-        uses: actions/checkout@v3
-        with:
-          fetch-depth: 0
       - name: Run pre-commit-hooks
         run: |
           git config --global --add safe.directory $PWD
