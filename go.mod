@@ -3,7 +3,7 @@ module github.com/e-breuninger/terraform-provider-ignition
 go 1.19
 
 require (
-	github.com/coreos/butane v0.18.0
+	github.com/coreos/butane v0.19.0
 	github.com/coreos/go-semver v0.3.1
 	github.com/coreos/ignition/v2 v2.17.0
 	github.com/coreos/vcontext v0.0.0-20230201181013-d72178a18687
