@@ -2,7 +2,10 @@
 name: pre-commit
 on:
   push:
-    branches: ["*"]
+    branches: ["master"]
+  pull_request:
+    branches:
+      - master
 jobs:
   pre-commit:
     permissions: read-all
@@ -35,7 +38,6 @@ jobs:
           apk update --cache-dir $APK_CACHE_DIR
           apk add --cache-dir $APK_CACHE_DIR go python3-dev py3-pip gcc musl-dev
           go install github.com/kisielk/errcheck@v1.6.3
-          go install honnef.co/go/tools/cmd/staticcheck@v0.4.3
           pip install pre-commit
       - name: Run pre-commit-hooks
         run: |
