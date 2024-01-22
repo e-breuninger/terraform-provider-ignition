@@ -44,4 +44,4 @@ jobs:
           git config --global --add safe.directory $PWD
           export GOPATH=$(realpath $GOPATH)
           export PATH=/usr/local/go/bin:$GOPATH/bin:$PATH
-          pre-commit run --all-files --color=always --show-diff-on-failure
+          pre-commit run --all-files --color=always --show-diff-on-failure -v
