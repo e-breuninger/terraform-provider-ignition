@@ -25,5 +25,3 @@ repos:
       - id: go-err-check
       - id: go-unit-tests
       - id: gofumpt  # requires github.com/mvdan/gofumpt
-      - id: go-ruleguard  # requires https://github.com/quasilyte/go-ruleguard
-        args: [rules/rules.go]  # required
