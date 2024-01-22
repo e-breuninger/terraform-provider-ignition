@@ -11,7 +11,7 @@ jobs:
     permissions: read-all
     runs-on: ubuntu-latest
     container:
-      image: alpine:3.17
+      image: alpine:3.19
     env:
       GOPATH: ~/.cache/go
       APK_CACHE_DIR: ~/.cache/apk
@@ -38,7 +38,7 @@ jobs:
           apk update --cache-dir $APK_CACHE_DIR
           apk add --cache-dir $APK_CACHE_DIR go python3-dev py3-pip gcc musl-dev
           go install github.com/kisielk/errcheck@v1.6.3
-          pip install pre-commit
+          pip install pre-commit --break-system-packages
       - name: Run pre-commit-hooks
         run: |
           git config --global --add safe.directory $PWD
