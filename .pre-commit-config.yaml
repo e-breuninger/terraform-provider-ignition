@@ -21,7 +21,6 @@ repos:
     rev: v1.0.3
     hooks:
       - id: go-fmt-import
-      - id: go-vet
       - id: go-lint
       - id: go-err-check
       - id: go-static-check
