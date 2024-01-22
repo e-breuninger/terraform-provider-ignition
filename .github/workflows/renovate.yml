@@ -3,7 +3,19 @@ name: renovate
 on:
   schedule:
     - cron: "41 7 * * *"
-  workflow_dispatch: {}
+  workflow_dispatch:
+    inputs:
+      log_level:
+        type: choice
+        description: Log level to run renovate in
+        required: true
+        default: INFO
+        options:
+          - DEBUG
+          - INFO
+          - WARN
+          - ERROR
+          - FATAL
 jobs:
   renovate:
     permissions:
@@ -21,5 +33,5 @@ jobs:
           RENOVATE_PLATFORM: github
           RENOVATE_TOKEN: ${{secrets.GITHUB_TOKEN}}
           RENOVATE_AUTODISCOVER: "false"
-          LOG_LEVEL: debug
+          LOG_LEVEL: ${{ github.event.inputs.log_level || 'INFO' }}
           RENOVATE_DRY_RUN: "full"
