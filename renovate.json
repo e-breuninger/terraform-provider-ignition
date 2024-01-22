@@ -4,6 +4,9 @@
         "config:best-practices",
         ":labels(dependencies)"
     ],
+		"ignorePaths": [
+			".github/**"
+		],
     "postUpdateOptions": ["gomodTidy", "gomodUpdateImportPaths"],
     "packageRules": [
       {
