@@ -23,4 +23,3 @@ repos:
       - id: go-fmt-import
       - id: go-err-check
       - id: go-unit-tests
-      - id: gofumpt  # requires github.com/mvdan/gofumpt
