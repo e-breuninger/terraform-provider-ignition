@@ -1,0 +1,15 @@
+{
+    "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+    "extends": [
+        "config:best-practices",
+        ":labels(dependencies)"
+    ],
+    "postUpdateOptions": ["gomodTidy", "gomodUpdateImportPaths"],
+    "packageRules": [
+      {
+        "description": "Chore for dependencies of examples",
+        "matchFileNames": ["**/examples/**"],
+        "semanticCommitType": "chore"
+      }
+    ]
+}
