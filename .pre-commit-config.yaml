@@ -13,6 +13,10 @@ repos:
     hooks:
       - id: yamllint
         args: [-c=.yaml-lint.yml]
+  - repo: https://github.com/golangci/golangci-lint
+    rev: v1.55.2
+    hooks:
+      - id: golangci-lint-full
   - repo: https://github.com/Bahjat/pre-commit-golang
     rev: v1.0.3
     hooks:
@@ -23,7 +27,5 @@ repos:
       - id: go-static-check
       - id: go-unit-tests
       - id: gofumpt  # requires github.com/mvdan/gofumpt
-      - id: golangci-lint  # requires github.com/golangci/golangci-lint
-        args: [--config=.github/linters/.golangci.yml]  # optional
       - id: go-ruleguard  # requires https://github.com/quasilyte/go-ruleguard
         args: [rules/rules.go]  # required
