@@ -16,6 +16,18 @@ on:
           - WARN
           - ERROR
           - FATAL
+      dry_run:
+        type: choice
+        description: |
+          Wether and how to run renovate in dry mode
+          see https://docs.renovatebot.com/self-hosted-configuration/#dryrun
+        required: false
+        default: ""
+        options:
+          - ""
+          - extract
+          - lookup
+          - full
 jobs:
   renovate:
     permissions:
@@ -34,4 +46,4 @@ jobs:
           RENOVATE_TOKEN: ${{secrets.GITHUB_TOKEN}}
           RENOVATE_AUTODISCOVER: "false"
           LOG_LEVEL: ${{ github.event.inputs.log_level || 'INFO' }}
-          RENOVATE_DRY_RUN: "full"
+          RENOVATE_DRY_RUN: ${{ github.event.inputs.dry_run || '' }}
