@@ -6,7 +6,7 @@ require (
 	github.com/coreos/butane v0.19.0
 	github.com/coreos/go-semver v0.3.1
 	github.com/coreos/ignition/v2 v2.17.0
-	github.com/coreos/vcontext v0.0.0-20230201181013-d72178a18687
+	github.com/coreos/vcontext v0.0.0-20231102161604-685dc7299dc5
 	github.com/hashicorp/terraform-plugin-sdk/v2 v2.31.0
 )
 
