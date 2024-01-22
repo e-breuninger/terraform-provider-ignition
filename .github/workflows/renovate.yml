@@ -1,0 +1,25 @@
+---
+name: renovate
+on:
+  schedule:
+    - cron: "41 7 * * *"
+  workflow_dispatch: {}
+jobs:
+  renovate:
+    permissions:
+      contents: write  # to be able to publish a GitHub release
+      issues: write  # to be able to comment on released issues
+      pull-requests: write  # to be able to comment on released pull requests
+      id-token: write  # to enable use of OIDC for npm provenance
+    runs-on: ubuntu-latest
+    container:
+      image: ghcr.io/renovatebot/renovate:37-slim
+    steps:
+      - name: Run renovate
+        run: renovate $GITHUB_REPOSITORY
+        env:  # For illustration purposes, please use secrets.
+          RENOVATE_PLATFORM: github
+          RENOVATE_TOKEN: ${{secrets.GITHUB_TOKEN}}
+          RENOVATE_AUTODISCOVER: "false"
+          LOG_LEVEL: debug
+          RENOVATE_DRY_RUN: "full"
