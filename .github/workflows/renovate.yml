@@ -35,6 +35,7 @@ jobs:
       issues: write  # to be able to comment on released issues
       pull-requests: write  # to be able to comment on released pull requests
       id-token: write  # to enable use of OIDC for npm provenance
+      actions: write  # to allow to update files in .github/workflows
     runs-on: ubuntu-latest
     container:
       image: ghcr.io/renovatebot/renovate:37-slim
