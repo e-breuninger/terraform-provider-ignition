@@ -3,7 +3,12 @@ name: renovate
 on:
   schedule:
     - cron: "41 7 * * *"
-  workflow_dispatch: {}
+  workflow_dispatch:
+    inputs:
+      branch:
+        description: Branch to run on
+        required: true
+        default: ci/renovate
 jobs:
   renovate:
     permissions:
