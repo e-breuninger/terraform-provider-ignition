@@ -14,14 +14,17 @@ jobs:
       id-token: write  # to enable use of OIDC for npm provenance
     runs-on: ubuntu-latest
     container:
-      image: node:lts-alpine3.17
+      image: node:lts-alpine3.19
     env:
       NPM_CACHE_DIR: ~/.cache/npm
       GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     if: ${{ github.event.workflow_run.conclusion == 'success' }}
     steps:
       - name: Install job dependencies
-        run: apk add tar git
+        run: apk add tar git gpg gpg-agent cosign
+      - name: Import GPG key
+        run: |
+          echo -n "${{ secrets.GPG_PRIVATE_KEY }}" > key.gpg
       - uses: actions/cache@v4
         with:
           path: ~/.cache
@@ -42,22 +45,36 @@ jobs:
         run: |
           git config --global --add safe.directory $PWD
           npx semantic-release
-      - name: Set up Go
-        uses: actions/setup-go@v5
+  gorelease:
+    needs: semantic-release
+    permissions:
+      contents: write  # to be able to publish a GitHub release
+      issues: write  # to be able to comment on released issues
+      pull-requests: write  # to be able to comment on released pull requests
+      id-token: write  # to enable use of OIDC for npm provenance
+    runs-on: ubuntu-latest
+    container:
+      image: goreleaser/goreleaser
+    env:
+      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
         with:
-          go-version: stable
-      - name: Import GPG key
-        id: import_gpg
-        uses: paultyng/ghaction-import-gpg@v2.1.0
-        env:
-          GPG_PRIVATE_KEY: ${{ secrets.GPG_PRIVATE_KEY }}
-          PASSPHRASE: ${{ secrets.PASSPHRASE }}
+          ref: master
+          fetch-depth: 0
       - name: Run GoReleaser
-        uses: goreleaser/goreleaser-action@v5.0.0
-        with:
-          version: latest
-          args: release --clean
+        run: |
+          apk add gpg-agent
+          echo -n "${{ secrets.GPG_PRIVATE_KEY }}" > key.gpg
+          echo "${{ secrets.PASSPHRASE }}" | gpg --batch --yes --passphrase-fd 0 --import key.gpg
+          echo "allow-preset-passphrase" > $HOME/.gnupg/gpg-agent.conf
+          gpgconf --reload gpg-agent
+          HEXPASSWD=$(echo -n "${{ secrets.PASSPHRASE }}" | hexdump -v -e '/1 "%02X"')
+          gpg-connect-agent "preset_passphrase ${{ secrets.KEYGRIP }} -1 $HEXPASSWD" /bye
+          git config --global --add safe.directory $PWD
+          goreleaser release --clean
         env:
-          GPG_FINGERPRINT: ${{ steps.import_gpg.outputs.fingerprint }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          GPG_PASSWORD: ${{ secrets.PASSPHRASE }}
+          GPG_FINGERPRINT: ${{ secrets.FINGERPRINT }}
