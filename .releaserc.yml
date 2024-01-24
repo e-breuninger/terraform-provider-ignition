@@ -10,6 +10,10 @@ plugins:
   - - "@semantic-release/changelog"
     - changelogFile: CHANGELOG.md
       changelogTitle: "# Changelog"
+  - - "@semantic-release/exec"
+    - prepareCmd: "sed --regexp-extended --null-data --in-place
+        's/(\\s*source\\s+= \"e-breuninger\\/ignition\"\\n\\s*version\\s+= \")[0-9.]+(\")/\\1${nextRelease.version}\\2/g'
+        README.md"
   - - "@semantic-release/git"
-    - assets: CHANGELOG.md
+    - assets: [CHANGELOG.md, README.md]
       message: "chore(release): ${nextRelease.version}\n\n${nextRelease.notes}"
