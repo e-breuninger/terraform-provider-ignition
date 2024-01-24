@@ -20,6 +20,5 @@ repos:
   - repo: https://github.com/Bahjat/pre-commit-golang
     rev: v1.0.3
     hooks:
-      - id: go-fmt-import
       - id: go-err-check
       - id: go-unit-tests
