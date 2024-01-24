@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.0.2](https://github.com/e-breuninger/terraform-provider-ignition/compare/v1.0.1...v1.0.2) (1/24/2024)
+
+
+### Bug Fixes
+
+* Run gorelease as part of semantic release ([42b922d](https://github.com/e-breuninger/terraform-provider-ignition/commit/42b922dd69ce512d028852a0d1e2c33014e5bf5a))
+* Update README on release ([3307416](https://github.com/e-breuninger/terraform-provider-ignition/commit/3307416c9a50f59b18e2e3a3e06fd81c08bace26))
+
 ## [1.0.1](https://github.com/e-breuninger/terraform-provider-ignition/compare/v1.0.0...v1.0.1) (2024-01-24)
 
 
