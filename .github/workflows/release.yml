@@ -14,17 +14,23 @@ jobs:
       id-token: write  # to enable use of OIDC for npm provenance
     runs-on: ubuntu-latest
     container:
-      image: node:lts-alpine3.19
+      image: goreleaser/goreleaser
     env:
       NPM_CACHE_DIR: ~/.cache/npm
       GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      GPG_FINGERPRINT: ${{ secrets.FINGERPRINT }}
     if: ${{ github.event.workflow_run.conclusion == 'success' }}
     steps:
       - name: Install job dependencies
-        run: apk add tar git gpg gpg-agent cosign
+        run: apk add tar git gpg gpg-agent nodejs npm sed
       - name: Import GPG key
         run: |
           echo -n "${{ secrets.GPG_PRIVATE_KEY }}" > key.gpg
+          echo "${{ secrets.PASSPHRASE }}" | gpg --batch --yes --passphrase-fd 0 --import key.gpg
+          echo "allow-preset-passphrase" > $HOME/.gnupg/gpg-agent.conf
+          gpgconf --reload gpg-agent
+          HEXPASSWD=$(echo -n "${{ secrets.PASSPHRASE }}" | hexdump -v -e '/1 "%02X"')
+          gpg-connect-agent "preset_passphrase ${{ secrets.KEYGRIP }} -1 $HEXPASSWD" /bye
       - uses: actions/cache@v4
         with:
           path: ~/.cache
@@ -33,6 +39,8 @@ jobs:
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
+      - name: Calm git
+        run: git config --global --add safe.directory $PWD
       - name: Install semantic-release and plugins
         run: npm install --cache $NPM_CACHE_DIR
           semantic-release
@@ -43,35 +51,4 @@ jobs:
           conventional-changelog-conventionalcommits
       - name: Run semantic-release
         run: |
-          git config --global --add safe.directory $PWD
           npx semantic-release
-  gorelease:
-    needs: semantic-release
-    permissions:
-      contents: write  # to be able to publish a GitHub release
-    runs-on: ubuntu-latest
-    container:
-      image: goreleaser/goreleaser
-    env:
-      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-    if: ${{ github.event.workflow_run.conclusion == 'success' }}
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-        with:
-          ref: master
-          fetch-depth: 0
-      - name: Run GoReleaser
-        run: |
-          apk add gpg-agent
-          echo -n "${{ secrets.GPG_PRIVATE_KEY }}" > key.gpg
-          echo "${{ secrets.PASSPHRASE }}" | gpg --batch --yes --passphrase-fd 0 --import key.gpg
-          echo "allow-preset-passphrase" > $HOME/.gnupg/gpg-agent.conf
-          gpgconf --reload gpg-agent
-          HEXPASSWD=$(echo -n "${{ secrets.PASSPHRASE }}" | hexdump -v -e '/1 "%02X"')
-          gpg-connect-agent "preset_passphrase ${{ secrets.KEYGRIP }} -1 $HEXPASSWD" /bye
-          git config --global --add safe.directory $PWD
-          goreleaser release --clean
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          GPG_FINGERPRINT: ${{ secrets.FINGERPRINT }}
