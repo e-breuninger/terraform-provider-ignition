@@ -18,7 +18,7 @@ terraform {
   required_providers {
     ignition = {
       source  = "e-breuninger/ignition"
-      version = "1.0.2"
+      version = "1.0.3"
     }
   }
 }
