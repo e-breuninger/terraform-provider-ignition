@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.0.4](https://github.com/e-breuninger/terraform-provider-ignition/compare/v1.0.3...v1.0.4) (2/24/2024)
+
+
+### Bug Fixes
+
+* **deps:** update module github.com/hashicorp/terraform-plugin-sdk/v2 to v2.33.0 ([faf4bd9](https://github.com/e-breuninger/terraform-provider-ignition/commit/faf4bd9bd0192099963f8471542f21d5a74794ab))
+
 ## [1.0.3](https://github.com/e-breuninger/terraform-provider-ignition/compare/v1.0.2...v1.0.3) (2/4/2024)
 
 
