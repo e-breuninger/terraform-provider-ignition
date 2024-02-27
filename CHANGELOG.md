@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.0.5](https://github.com/e-breuninger/terraform-provider-ignition/compare/v1.0.4...v1.0.5) (2/27/2024)
+
+
+### Bug Fixes
+
+* **deps:** update module github.com/coreos/butane to v0.20.0 ([972698f](https://github.com/e-breuninger/terraform-provider-ignition/commit/972698f8506b729f311c3fcb24ec91ad715f11df))
+
 ## [1.0.4](https://github.com/e-breuninger/terraform-provider-ignition/compare/v1.0.3...v1.0.4) (2/24/2024)
 
 
