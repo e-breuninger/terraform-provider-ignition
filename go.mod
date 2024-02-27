@@ -5,7 +5,7 @@ go 1.21
 toolchain go1.22.0
 
 require (
-	github.com/coreos/butane v0.19.0
+	github.com/coreos/butane v0.20.0
 	github.com/coreos/go-semver v0.3.1
 	github.com/coreos/ignition/v2 v2.17.0
 	github.com/coreos/vcontext v0.0.0-20231102161604-685dc7299dc5
