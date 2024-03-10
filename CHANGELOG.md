@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.0.6](https://github.com/e-breuninger/terraform-provider-ignition/compare/v1.0.5...v1.0.6) (3/10/2024)
+
+
+### Bug Fixes
+
+* **deps:** update module github.com/coreos/ignition/v2 to v2.18.0 ([210c7c8](https://github.com/e-breuninger/terraform-provider-ignition/commit/210c7c8f98d06dae81849c34242b437b9f8799fe))
+
 ## [1.0.5](https://github.com/e-breuninger/terraform-provider-ignition/compare/v1.0.4...v1.0.5) (2/27/2024)
 
 
