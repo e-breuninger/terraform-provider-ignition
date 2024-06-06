@@ -2,7 +2,7 @@ module github.com/e-breuninger/terraform-provider-ignition
 
 go 1.21
 
-toolchain go1.22.3
+toolchain go1.22.4
 
 require (
 	github.com/coreos/butane v0.20.0
