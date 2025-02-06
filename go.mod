@@ -9,7 +9,7 @@ require (
 	github.com/coreos/go-semver v0.3.1
 	github.com/coreos/ignition/v2 v2.20.0
 	github.com/coreos/vcontext v0.0.0-20231102161604-685dc7299dc5
-	github.com/hashicorp/terraform-plugin-sdk/v2 v2.34.0
+	github.com/hashicorp/terraform-plugin-sdk/v2 v2.36.0
 )
 
 require (
